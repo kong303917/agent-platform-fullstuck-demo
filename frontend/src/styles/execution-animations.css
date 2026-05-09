@@ -1,0 +1,207 @@
+/* ==============================================
+ * 节点执行动画
+ * ============================================== */
+
+/* 脉冲呼吸动画 — 节点正在执行 */
+@keyframes node-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 20px 4px rgba(99, 102, 241, 0.6);
+  }
+}
+
+/* 边框发光旋转 — 节点正在执行 */
+@keyframes node-glow {
+  0% {
+    border-color: rgba(99, 102, 241, 0.3);
+  }
+  50% {
+    border-color: rgba(99, 102, 241, 0.8);
+  }
+  100% {
+    border-color: rgba(99, 102, 241, 0.3);
+  }
+}
+
+/* 完成闪烁 — 节点执行完成 */
+@keyframes node-complete-flash {
+  0% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+  30% {
+    box-shadow: 0 0 24px 8px rgba(16, 185, 129, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 8px 2px rgba(16, 185, 129, 0.15);
+  }
+}
+
+/* 错误抖动 — 节点执行出错 */
+@keyframes node-error-shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 50%, 90% {
+    transform: translateX(-3px);
+  }
+  30%, 70% {
+    transform: translateX(3px);
+  }
+}
+
+/* 旋转加载指示器 */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 文字淡入 */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==============================================
+ * 节点状态样式类
+ * ============================================== */
+
+/* 执行中 */
+.node-running {
+  animation: node-pulse 1.5s ease-in-out infinite, node-glow 1.5s ease-in-out infinite;
+  position: relative;
+}
+
+.node-running::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(99, 102, 241, 0.4) 90deg,
+    transparent 180deg
+  );
+  z-index: -1;
+  animation: spin-slow 3s linear infinite;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  padding: 2px;
+  border-radius: 14px;
+}
+
+/* 执行完成 */
+.node-completed {
+  animation: node-complete-flash 0.6s ease-out forwards;
+}
+
+/* 执行出错 */
+.node-error {
+  animation: node-error-shake 0.4s ease-in-out;
+  box-shadow: 0 0 12px 2px rgba(239, 68, 68, 0.3);
+}
+
+/* ==============================================
+ * 流式文本预览
+ * ============================================== */
+
+.streaming-text-preview {
+  animation: fade-in-up 0.2s ease-out;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* 光标闪烁 — 正在生成文本 */
+.streaming-cursor::after {
+  content: '▊';
+  animation: blink-cursor 0.8s step-end infinite;
+  color: rgba(139, 92, 246, 0.8);
+  font-size: 10px;
+  margin-left: 1px;
+}
+
+@keyframes blink-cursor {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ==============================================
+ * 执行状态指示器
+ * ============================================== */
+
+.execution-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.execution-indicator.running {
+  background: rgba(99, 102, 241, 0.15);
+  color: rgb(165, 148, 249);
+}
+
+.execution-indicator.completed {
+  background: rgba(16, 185, 129, 0.15);
+  color: rgb(52, 211, 153);
+}
+
+.execution-indicator.error {
+  background: rgba(239, 68, 68, 0.15);
+  color: rgb(248, 113, 113);
+}
+
+/* 旋转图标 */
+.spin-icon {
+  animation: spin-slow 1s linear infinite;
+}
+
+/* ==============================================
+ * 边流动动画 (正在执行的边)
+ * ============================================== */
+
+.edge-running {
+  stroke-dasharray: 8 4;
+  animation: edge-flow 0.8s linear infinite;
+}
+
+@keyframes edge-flow {
+  from {
+    stroke-dashoffset: 12;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ==============================================
+ * 实时步骤列表动画
+ * ============================================== */
+
+.live-step-enter {
+  animation: fade-in-up 0.3s ease-out;
+}
